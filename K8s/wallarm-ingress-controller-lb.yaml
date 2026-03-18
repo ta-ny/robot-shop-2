@@ -12,6 +12,7 @@ spec:
   externalTrafficPolicy: Local
   loadBalancerSourceRanges:
     - 65.132.246.78/32
+    - 112.216.0.186/32
   selector:
     app.kubernetes.io/name: wallarm-ingress
     app.kubernetes.io/instance: wallarm-ingress
