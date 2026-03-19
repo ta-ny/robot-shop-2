@@ -1,10 +1,6 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  namespace: {{ .Values.namespace }}
-  annotations:
-    env: {{ .Values.policyAnnotations.env | quote }}
-    owner: {{ .Values.policyAnnotations.owner | quote }}
   labels:
     service: redis
   name: redis
@@ -37,7 +33,7 @@ spec:
             memory: 100Mi
           requests:
             cpu: 100m
-            memory: 100Mi
+            memory: 50Mi
       restartPolicy: Always
       {{- with .Values.redis.affinity }}
       affinity:
