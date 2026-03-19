@@ -56,7 +56,9 @@ ratings: {}
 redis:
   # Storage class to use with redis statefulset.
   # Leave empty to use the cluster default (portable across AKS/EKS/GKE).
-  storageClassName: ""
+  # storageClassName: ""
+  persistence:
+    enabled: false
 
 shipping:
   resources:
