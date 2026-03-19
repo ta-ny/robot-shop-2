@@ -1,6 +1,10 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  namespace: {{ .Values.namespace }}
+  annotations:
+    env: {{ .Values.policyAnnotations.env | quote }}
+    owner: {{ .Values.policyAnnotations.owner | quote }}
   labels:
     service: redis
   name: redis
@@ -25,15 +29,15 @@ spec:
         ports:
         - containerPort: 6379
         volumeMounts:
-          - name: data
-            mountPath: /mnt/redis
+        - name: data
+          mountPath: /mnt/redis
         resources:
           limits:
             cpu: 200m
             memory: 100Mi
           requests:
             cpu: 100m
-            memory: 50Mi
+            memory: 100Mi
       restartPolicy: Always
       {{- with .Values.redis.affinity }}
       affinity:
@@ -47,17 +51,6 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-  volumeClaimTemplates:
-    - metadata:
-        name: data
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        {{ if not .Values.openshift }}
-        {{- if .Values.redis.storageClassName }}
-        storageClassName: {{ .Values.redis.storageClassName }}
-        {{- end }}
-        volumeMode: Filesystem
-        {{ end }}
-        resources:
-          requests:
-            storage: 1Gi
+      volumes:
+      - name: data
+        emptyDir: {}
